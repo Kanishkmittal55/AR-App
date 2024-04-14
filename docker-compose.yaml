@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  app:
+    image: ${REGISTRY}/${SERVICE}:${VERSION}
+    container_name: ${SERVICE}
+    build:
+      context: ${PWD}
+      dockerfile: Dockerfile
+      target: ${DOCKER_BUILD_TARGET}
+      x-bake:
+        platforms:
+          - linux/amd64
+          - linux/arm64
+        tags:
+          - artifactory.dailypay.com/dailypay-docker/release/hackathon/${SERVICE}:${VERSION}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ${PWD}:/app
+    networks:
+      - hackathon
+
+networks:
+  hackathon:
+    name: hackathon
